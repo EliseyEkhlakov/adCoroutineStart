@@ -2,6 +2,9 @@ package ru.adorly.adcoroutinestart
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.widget.Toast
 import androidx.core.view.isVisible
 import ru.adorly.adcoroutinestart.databinding.ActivityMainBinding
@@ -37,19 +40,24 @@ class MainActivity : AppCompatActivity() {
     private fun loadCity(callBack: (String) -> Unit) {
         thread {
             Thread.sleep(5000)
-            callBack.invoke("Moscow")
+            runOnUiThread { callBack.invoke("Moscow") }
         }
     }
 
     private fun loadTemperature(city: String, callBack: (Int) -> Unit) {
         thread {
-            Toast.makeText(
-                this,
-                getString(R.string.loading_temperature_toast, city),
-                Toast.LENGTH_SHORT
-            ).show()
+            runOnUiThread {
+                Toast.makeText(
+                    this,
+                    getString(R.string.loading_temperature_toast, city),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
             Thread.sleep(5000)
-            callBack.invoke(17)
+            runOnUiThread {
+                callBack.invoke(17)
+            }
+
         }
 
     }
